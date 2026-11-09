@@ -27,7 +27,7 @@ dataProcessPlotsTMT(
 )
 }
 \arguments{
-\item{data}{the output of \code{\link{proteinSummarization}} function. It is a list with data frames `FeatureLevelData` and `ProteinLevelData`}
+\item{data}{the output of \code{\link{proteinSummarization}} function. It is a list with data frames `FeatureLevelData` and `ProteinLevelData`. If using \code{\link{normalizeToBaitTMT}}, supply the original summarization output for these plots.}
 
 \item{type}{choice of visualization. "ProfilePlot" represents profile plot of log intensities across MS runs.
 "QCPlot" represents box plots of log intensities across channels and MS runs.}

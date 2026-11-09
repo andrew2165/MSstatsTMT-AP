@@ -12,7 +12,7 @@
 #' @importFrom graphics axis image legend mtext par plot.new title plot
 #' @importFrom grDevices dev.off hcl pdf
 #' @importFrom plotly ggplotly style add_trace plot_ly subplot
-#' @param data the output of \code{\link{proteinSummarization}} function. It is a list with data frames `FeatureLevelData` and `ProteinLevelData`
+#' @param data the output of \code{\link{proteinSummarization}} function. It is a list with data frames `FeatureLevelData` and `ProteinLevelData`. If using \code{\link{normalizeToBaitTMT}}, supply the original summarization output for these plots.
 #' @param type choice of visualization. "ProfilePlot" represents profile plot of log intensities across MS runs.
 #' "QCPlot" represents box plots of log intensities across channels and MS runs.
 #' @param ylimUp upper limit for y-axis in the log scale.
@@ -69,6 +69,11 @@ dataProcessPlotsTMT = function(
     height = 10, which.Protein = "all", originalPlot = TRUE, summaryPlot = TRUE,
     address = "", isPlotly = FALSE
 ) {
+    if (.hasBaitNormalization(data)) {
+        stop("Use the original protein summary for dataProcessPlotsTMT(). ",
+             "These plots use the original intensity scale and channel annotations.",
+             call. = FALSE)
+    }
     data.peptide <- data$FeatureLevelData
     data.summarization <- data$ProteinLevelData
     common_groups = intersect(data.peptide$Condition, data.summarization$Condition)

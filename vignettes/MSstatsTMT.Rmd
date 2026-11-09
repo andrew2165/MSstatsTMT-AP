@@ -304,7 +304,7 @@ Visualization for explanatory data analysis. To illustrate the quantitative data
 
 #### Arguments
 
-* `data` : the output of `proteinSummarization` function. It is a list with data frames `FeatureLevelData` and `ProteinLevelData`
+* `data` : the original output of `proteinSummarization()`. It is a list with data frames `FeatureLevelData` and `ProteinLevelData`.
 * `type` : choice of visualization. "ProfilePlot" represents profile plot of log intensities across MS runs.
 "QCPlot" represents quality control plot of log intensities across MS runs.
 * `ylimUp` : upper limit for y-axis in the log scale.
@@ -363,7 +363,7 @@ Tests for significant changes in protein abundance across conditions based on a 
 
 ### Arguments
 
-* `data` : the output of `proteinSummarization` function. It is a list with data frames `FeatureLevelData` and `ProteinLevelData`
+* `data` : the output of `proteinSummarization()` or `normalizeToBaitTMT()`. It is a list with data frames `FeatureLevelData` and `ProteinLevelData`.
 * `contrast.matrix` : Comparison between conditions of interests. 1) default is `pairwise`, which compare all possible pairs between two conditions. 2) Otherwise, users can specify the comparisons of interest. Based on the levels of conditions, specify 1 or -1 to the conditions of interests and 0 otherwise. The levels of conditions are sorted alphabetically.
 * `moderated` : If moderated = TRUE, then moderated t statistic will be calculated; otherwise, ordinary t statistic will be used.
 * `adj.method` : adjusted method for multiple comparison. 'BH` is default.
@@ -414,3 +414,57 @@ test.contrast <- groupComparisonTMT(data = quant.msstats, contrast.matrix = comp
 ```{r}
 head(test.contrast$ComparisonResult)
 ```
+
+### Optional bait normalization for quantitative affinity purification
+
+For quantitative co-immunoprecipitation or affinity-purification experiments,
+use `normalizeToBaitTMT()` after protein summarization and any TMT
+reference-channel alignment. `ProteinLevelData$Abundance` is already on the
+log2 scale. Within each `Mixture`, `TechRepMixture`, `Run`, and `Channel`,
+subtracting the bait abundance from the client abundance gives
+`log2(client / bait)`. Global median normalization is a separate,
+experiment-specific choice made during summarization. The bait step applies
+no further global normalization.
+
+```{r, eval=FALSE}
+# Use the exact bait identifier as it appears in your protein summary.
+quant <- proteinSummarization(ap_input, global_norm = FALSE,
+                              reference_norm = TRUE)
+quant_bait <- normalizeToBaitTMT(quant, bait = "sp|Q8NHS0|DNJB8_HUMAN")
+audit <- attr(quant_bait, "BaitNormalization")
+head(audit$bait_abundance)
+audit$dropped_samples
+results <- groupComparisonTMT(quant_bait, contrast.matrix = "pairwise")
+```
+
+In this example, the input has reference channels annotated as `Norm`.
+If `Norm` or `Empty` rows were retained during summarization, the bait step
+keeps their original protein measurements in `audit$special_channels` and
+excludes them from the analysis table. Bait rows are also excluded.
+`FeatureLevelData` retains the original feature measurements and scale.
+Pass `quant` to `dataProcessPlotsTMT()` for profile and QC plots.
+Saving and loading the normalized result with `saveRDS()` and `readRDS()`
+preserves its audit and scale marker. Rewrapping the same tables keeps the
+scale marker but discards the outer audit. Rebuilding the protein table,
+for example with `data.table::rbindlist()`, can also discard the marker.
+The plotting and repeat-normalization checks rely on these attributes.
+
+By default, a biological sample with client rows and absent or non-finite
+bait stops the analysis. `missing_bait = "drop"` warns and drops all clients
+from affected sample channels. Review the audit and the remaining condition
+and replicate coverage before testing. If all channels for a condition are
+dropped, `contrast.matrix = "pairwise"` omits comparisons involving that
+condition. Missing client values remain missing.
+Analyze bait-free biological controls separately. Check bait peptide
+consistency, interference, missingness, imputation, and saturation before
+interpreting a finite bait summary.
+
+Contrasts describe differences in client recovery per recovered bait.
+Binding affinity, absolute stoichiometry, and interaction specificity require
+additional evidence. The existing group comparison models estimate variation
+in the replicate-level log2 ratios. They do not explicitly propagate
+bait-summary uncertainty or estimate the covariance of client and bait
+summaries. See the DNAJB8 manganese-exposure example and the discussion of
+bait peptide consistency and saturation in an AP-MS protocol.
+[Quanrud et al.](https://doi.org/10.26434/chemrxiv-2023-d2ffl),
+[Kaushal et al.](https://doi.org/10.1016/j.xpro.2024.103286).

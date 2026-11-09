@@ -19,7 +19,7 @@ groupComparisonTMT(
 )
 }
 \arguments{
-\item{data}{the output of \code{\link{proteinSummarization}} function. It is a list with data frames `FeatureLevelData` and `ProteinLevelData`}
+\item{data}{the output of \code{\link{proteinSummarization}} or \code{\link{normalizeToBaitTMT}}. It is a list with data frames `FeatureLevelData` and `ProteinLevelData`.}
 
 \item{contrast.matrix}{Comparison between conditions of interests. 1) default is "pairwise", which compare all possible pairs between two conditions. 2) Otherwise, users can specify the comparisons of interest. Based on the levels of conditions, specify 1 or -1 to the conditions of interests and 0 otherwise. The levels of conditions are sorted alphabetically.}
 
