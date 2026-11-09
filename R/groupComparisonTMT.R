@@ -3,7 +3,7 @@
 #' Tests for significant changes in protein abundance across conditions based on a family of linear mixed-effects models in TMT experiment.
 #' Experimental design of case-control study (patients are not repeatedly measured) is automatically determined based on proper statistical model.
 #'
-#' @param data the output of \code{\link{proteinSummarization}} function. It is a list with data frames `FeatureLevelData` and `ProteinLevelData`
+#' @param data the output of \code{\link{proteinSummarization}} or \code{\link{normalizeToBaitTMT}}. It is a list with data frames `FeatureLevelData` and `ProteinLevelData`.
 #' @param contrast.matrix Comparison between conditions of interests. 1) default is "pairwise", which compare all possible pairs between two conditions. 2) Otherwise, users can specify the comparisons of interest. Based on the levels of conditions, specify 1 or -1 to the conditions of interests and 0 otherwise. The levels of conditions are sorted alphabetically.
 #' @param moderated TRUE will moderate t statistic; FALSE (default) uses ordinary t statistic.
 #' @param adj.method adjusted method for multiple comparison. "BH" is default.
