@@ -14,7 +14,7 @@
 #' }
 #'
 #' @docType package
-#' @name MSstatsTMT
+#' @name MSstatsTMTAP
 NULL
 
 

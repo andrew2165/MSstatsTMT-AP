@@ -1,4 +1,4 @@
-Package: MSstatsTMT
+Package: MSstatsTMTAP
 Title: Protein Significance Analysis in shotgun mass spectrometry-based proteomic experiments with tandem mass tag (TMT) labeling
 Version: 2.20.0
 Date: 2025-03-05
@@ -14,7 +14,7 @@ Authors@R: c(person("Devon", "Kohler", email = "kohler.d@northeastern.edu", role
 License: Artistic-2.0
 Depends: R (>= 4.2)
 Imports: limma, lme4, lmerTest, methods, data.table, 
-         stats, utils, ggplot2, grDevices, graphics, MSstats,
+         stats, utils, ggplot2, grDevices, graphics, MSstatsAP,
          MSstatsConvert, checkmate, plotly, htmltools
 Suggests: BiocStyle, knitr, rmarkdown, testthat
 VignetteBuilder: knitr
@@ -24,3 +24,4 @@ LazyData: true
 URL: http://msstats.org/msstatstmt/
 BugReports: https://groups.google.com/forum/#!forum/msstats
 RoxygenNote: 7.3.1
+Remotes: andrew2165/MSstats-AP@bait-normalization-release-3.23

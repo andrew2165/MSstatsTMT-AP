@@ -188,7 +188,7 @@ test_that("special channels stay on the original scale in the audit only", {
 })
 
 test_that("group comparison on bait ratios agrees with manual subtraction", {
-    quant = MSstatsTMT::quant.pd.msstats
+    quant = MSstatsTMTAP::quant.pd.msstats
     p = quant$ProteinLevelData
     # Treat each mixture/channel as one biological subject across technical runs.
     p$BioReplicate = paste(p$Mixture, p$Channel)

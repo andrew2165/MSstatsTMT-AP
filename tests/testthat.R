@@ -1,4 +1,4 @@
 library(testthat)
-library(MSstatsTMT)
+library(MSstatsTMTAP)
 
-test_check("MSstatsTMT")
+test_check("MSstatsTMTAP")

@@ -24,9 +24,9 @@ Load MSstatsTMT first. Then you are ready to start MSstatsTMT
 # if (!requireNamespace("BiocManager", quietly = TRUE))
 #   install.packages("BiocManager")
 # 
-# BiocManager::install("MSstatsTMT")
+# remotes::install_github("andrew2165/MSstatsTMT-AP@backport/bait-normalization-3.23")
 
-library(MSstatsTMT)
+library(MSstatsTMTAP)
 ```
 
 This vignette summarizes the introduction and various options of all functionalities in MSstatsTMT. 
